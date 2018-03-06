@@ -10,7 +10,7 @@ setup(name='pykeygen',
       author='Oskar Hladky',
       author_email='oskyks1@gmail.com',
       url='https://github.com/oskyk/pykeygen',
-      python_requires='>=2.7',
+      python_requires='>=3',
       scripts=['pykeygen'],
       keywords=['keygen', 'mnemonic', 'segwit', 'dash', 'litecoin', 'bitcoin']
 )
