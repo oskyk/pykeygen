@@ -1,0 +1,62 @@
+#!/usr/bin/env python3
+
+import btcpy
+from btcpy.structs.hd import ExtendedPrivateKey
+from btcpy.structs.script import P2pkhScript, P2shScript, P2wshV0Script
+
+import bip32utils
+import mnemonic
+import binascii
+
+TESTNETS = ['testnet', 'litecointest', 'dashtest']
+
+language = 'english'
+
+network = input('Network mainnet|dash|litecoin|testnet|dashtest|litecointest? ')
+btcpy.setup.setup(network)
+print('[1] Existing mnemonic')
+print('[2] Generate new mnemonic')
+print('[3] Extended private key')
+choice = input('? ')
+
+if choice == '1':
+    mnemo = input('Mnemonic? ')
+    m = mnemonic.mnemonic.Mnemonic(language)
+    binary = m.to_entropy(mnemo)
+    hexstring = binascii.hexlify(binary)
+    bip32key = bip32utils.BIP32Key.fromEntropy(hexstring, testnet=network in TESTNETS)
+    rootkey = ExtendedPrivateKey.decode(str(bip32key.ExtendedKey()))
+elif choice == '2':
+    m = mnemonic.mnemonic.Mnemonic(language)
+    mnemo = m.generate()
+    print('Yours mnemonic: "{}"'.format(mnemo))
+    binary = m.to_entropy(mnemo)
+    hexstring = binascii.hexlify(binary)
+    bip32key = bip32utils.BIP32Key.fromEntropy(hexstring, testnet=network in TESTNETS)
+    rootkey = ExtendedPrivateKey.decode(str(bip32key.ExtendedKey()))
+elif choice == '3':
+    rootkey = input('Rootkey? ')
+    rootkey = ExtendedPrivateKey.decode(rootkey)
+else:
+    print('Choice not found')
+    exit(1)
+
+hd_path = input('hd_path? ')
+while hd_path != '0':
+
+    derived = rootkey.derive(hd_path)
+    print('Derived hd priv key: {}'.format(derived.encode()))
+    print('Derived hd pub key: {}'.format(derived.pub().encode()))
+    print('Path address: {}'.format(derived.pub().key.to_address()))
+    print('Path segwit address: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().key))).to_address()))
+    print('Path wif: {}'.format(derived.key.to_wif()))
+
+    print('Address in index 1: {}'.format(derived.pub().derive('./1').key.to_address()))
+    print('Address in index 100: {}'.format(derived.pub().derive('./100').key.to_address()))
+    print('Address in index 1000: {}'.format(derived.pub().derive('./1000').key.to_address()))
+
+    print('Segwit address in index 1: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./1').key))).to_address()))
+    print('Segwit address in index 100: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./100').key))).to_address()))
+    print('Segwit address in index 1000: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./1000').key))).to_address()))
+
+    hd_path = input('hd_path or 0 to exit? ')
