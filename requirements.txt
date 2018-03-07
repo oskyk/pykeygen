@@ -1,2 +1,2 @@
 bip32utils
-git+https://github.com/oskyk/btcpy.git@altcoin-constants-filled
+chainside-btcpy-multi
