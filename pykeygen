@@ -58,5 +58,10 @@ while hd_path != '0':
     print('Segwit address in index 1: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./1').key))).to_address()))
     print('Segwit address in index 100: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./100').key))).to_address()))
     print('Segwit address in index 1000: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./1000').key))).to_address()))
+    address_index = input('Address index. "e" to exit? ')
+    while address_index != 'e':
+        print('Address in index {}: {}'.format(address_index, derived.pub().derive('./' + address_index).key.to_address()))
+        print('Segwit address in index {}: {}'.format(address_index, P2shScript(P2wshV0Script(P2pkhScript(derived.pub().derive('./' + address_index).key))).to_address()))
+        address_index = input('Address index. "e" to exit? ')
 
     hd_path = input('hd_path or 0 to exit? ')
