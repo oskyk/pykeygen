@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 
 import btcpy
-from btcpy.structs.hd import ExtendedPrivateKey
+from btcpy.structs.hd import ExtendedPrivateKey, PrivateKey
 from btcpy.structs.script import P2pkhScript, P2shScript, P2wshV0Script
 
 import bip32utils
@@ -17,6 +17,7 @@ btcpy.setup.setup(network)
 print('[1] Existing mnemonic')
 print('[2] Generate new mnemonic')
 print('[3] Extended private key')
+print('[4] Hex priv to wif')
 choice = input('? ')
 
 if choice == '1':
@@ -37,6 +38,13 @@ elif choice == '2':
 elif choice == '3':
     rootkey = input('Rootkey? ')
     rootkey = ExtendedPrivateKey.decode(rootkey)
+elif choice == '4':
+    priv_hex = input('Priv hex? ')
+    priv = PrivateKey.unhexlify(priv_hex)
+    print('WIF: {}'.format(priv.to_wif()))
+    print('Addr: {}'.format(str(priv.pub().to_address())))
+    print('Segwit addr: {}'.format(P2shScript(P2wshV0Script(P2pkhScript(priv.pub()))).to_address()))
+    exit(0)
 else:
     print('Choice not found')
     exit(1)

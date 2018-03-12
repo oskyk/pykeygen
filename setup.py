@@ -2,7 +2,7 @@ from distutils.core import setup
 from setuptools import find_packages
 
 setup(name='pykeygen',
-      version='0.0.3',
+      version='0.0.4',
       packages=find_packages(),
       install_requires=['bip32utils', 'chainside-btcpy-multi'],
       description='Tool to generate keys and addresses',
