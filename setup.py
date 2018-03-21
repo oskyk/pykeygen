@@ -4,7 +4,7 @@ from setuptools import find_packages
 setup(name='pykeygen',
       version='0.0.4',
       packages=find_packages(),
-      install_requires=['bip32utils', 'chainside-btcpy-multi'],
+      install_requires=['bip32utils', 'chainside-btcpy-multi', 'mnemonic'],
       description='Tool to generate keys and addresses',
       author='Oskar Hladky',
       author_email='oskyks1@gmail.com',

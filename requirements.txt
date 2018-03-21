@@ -1,2 +1,3 @@
 bip32utils
 chainside-btcpy-multi
+mnemonic
